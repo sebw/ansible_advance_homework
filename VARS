@@ -1,0 +1,7 @@
+TOWER_GUID=14d7
+MYKEY=/home/sw/.ssh/id_rsa
+MYUSER=swains-redhat.com
+
+OSP_GUID=beab
+
+TLC_USERNAME="swains-redhat.com"
