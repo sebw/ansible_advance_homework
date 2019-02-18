@@ -10,4 +10,4 @@
 - hosts: workstation
   become: yes
   roles:
-    - osp-servers
+    - osp-instances
