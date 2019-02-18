@@ -41,12 +41,13 @@
     - "{{ osp_servers.app2 }}"
     - "{{ osp_servers.db }}"
 
+# Register with a loop https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html#playbooks-loops
 - name: Add floating IP to Servers
   os_floating_ip:
     cloud: ospcloud
     server: "{{ item['name'] }}"
     network: ext_network
-    state: present # not required. choices: present;absent. Should the resource be present or absent.
+    state: present
     wait: yes
     reuse: yes
     timeout: 180
@@ -57,10 +58,24 @@
     - "{{ osp_servers.app2 }}"
     - "{{ osp_servers.db }}"
 
-- name: Wait for server to be available
+#- name: Display floating IP
+#  debug:
+#    msg: "{{ item.floating_ip.floating_ip_address }}"
+#  loop:
+#    - "{{ floating.results[0] }}"
+#    - "{{ floating.results[1] }}"
+#    - "{{ floating.results[2] }}"
+#    - "{{ floating.results[3] }}"
+    
+- name: Wait for new instances to be available
   wait_for:
-    host: "{{ floating.floating_ip.floating_ip_address }}"
+    host: "{{ item.floating_ip.floating_ip_address }}"
     port: 22
     delay: 10
     timeout: 600
-  delegate_to: localhost
+  loop:
+    - "{{ floating.results[0] }}"
+    - "{{ floating.results[1] }}"
+    - "{{ floating.results[2] }}"
+    - "{{ floating.results[3] }}"
+    
