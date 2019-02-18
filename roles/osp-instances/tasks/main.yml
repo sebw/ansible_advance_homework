@@ -2,20 +2,20 @@
 # tasks file for osp.servers
 #
 
-- name: debug
-  debug:
-    var: osp_servers
+#- name: debug
+#  debug:
+#    var: osp_servers
 
-- name: print group info
-  debug:
-    msg: "{{ item['name'] }}"
-  loop:
-    - "{{ osp_servers.frontend }}"
-    - "{{ osp_servers.app1 }}"
-    - "{{ osp_servers.app2 }}"
-    - "{{ osp_servers.db }}"
-
-- name: Create new server  and attaches them a network and passes metadata to the instance
+#- name: print group info
+#  debug:
+#    msg: "{{ item.meta[0].group }}"
+#  loop:
+#    - "{{ osp_servers.frontend }}"
+#    - "{{ osp_servers.app1 }}"
+#    - "{{ osp_servers.app2 }}"
+#    - "{{ osp_servers.db }}"
+# 
+- name: Create new server and attaches them a network and passes metadata to the instance
   os_server:
     cloud: ospcloud
     state: present
@@ -25,7 +25,7 @@
     flavor: "{{ item['flavor'] }}"
     key_name: "{{ item['key_name'] }}"
     security_groups: "{{ item['security_group'] }}"
-    meta: "{{ item['meta'] }}"
+    meta: "group={{ item.meta[0].group }},deployment_name={{ item.meta[0].deployment_name }}"
     nics:
       - net-name: int_network
     userdata: |
